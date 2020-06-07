@@ -289,7 +289,7 @@ public class Utilities {
 		}
 		try {
 			double d = Double.parseDouble(strNum);
-			d = d+1;
+			logger.log(Level.OFF,"d: "+d);
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
