@@ -289,7 +289,8 @@ public class Utilities {
 		}
 		try {
 			double d = Double.parseDouble(strNum);
-			logger.log(Level.OFF,"d: "+d);
+			String debugPrint = "d: "+d;
+			logger.log(Level.OFF,debugPrint);
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
