@@ -1,0 +1,11 @@
+language: java
+jdk:
+  - oraclejdk9
+addons:
+  sonarcloud:
+    organization: "esposito-matteo190320202155"
+    token: 76fd7b5ccbf7d50ae0234b6e32af50a756b1278c
+
+script: 
+- ant build
+- sonar-scanner
