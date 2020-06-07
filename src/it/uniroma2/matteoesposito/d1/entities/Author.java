@@ -1,5 +1,5 @@
 
-package Entity;
+package it.uniroma2.matteoesposito.d1.entities;
 
 import java.io.Serializable;
 import com.google.gson.annotations.Expose;
@@ -18,7 +18,7 @@ public class Author implements Serializable
     @SerializedName("date")
     @Expose
     private String date;
-    private final static long serialVersionUID = 8774274765797968339L;
+    private static final  long serialVersionUID = 8774274765797968339L;
 
     /**
      * No args constructor for use in serialization

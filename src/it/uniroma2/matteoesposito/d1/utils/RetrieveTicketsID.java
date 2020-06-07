@@ -1,3 +1,4 @@
+package it.uniroma2.matteoesposito.d1.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,8 +30,7 @@ public class RetrieveTicketsID {
       try {
          BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
          String jsonText = readAll(rd);
-         JSONArray json = new JSONArray(jsonText);
-         return json;
+         return new JSONArray(jsonText);
        } finally {
          is.close();
        }
@@ -41,8 +41,7 @@ public class RetrieveTicketsID {
       try {
          BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
          String jsonText = readAll(rd);
-         JSONObject json = new JSONObject(jsonText);
-         return json;
+         return new JSONObject(jsonText);
        } finally {
          is.close();
        }

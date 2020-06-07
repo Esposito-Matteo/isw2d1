@@ -1,3 +1,5 @@
+package it.uniroma2.matteoesposito.d1.utils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,13 +9,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Base64;
-import java.util.Map;
-import java.util.Date;
-import java.util.HashMap;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
@@ -22,20 +24,30 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
-import Entity.Element;
-import Entity.csvData;
+import it.uniroma2.matteoesposito.d1.entities.CSVData;
+import it.uniroma2.matteoesposito.d1.entities.Element;
 
-
-/**
- * 
- */
-
-/**
- * @author Matteo
- *
- */
-
-public class main {
+public class Utilities {
+	
+	private Utilities() {
+		
+	}
+	/**
+	 * 
+	 */
+	public static void start() {
+	
+		try {
+			Map<String, Date> JiraTicket = getTicket();
+			Element[] elements = getGitCommits();
+			Map<String,Integer> cool = createCalendar(elements);
+			CSVData elaborated = elaborateGatheredData(JiraTicket, elements,cool);
+			generateCsv(elaborated.getAggregated());
+		} catch (IOException | JSONException | ParseException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 	/**
 	 * 
@@ -43,8 +55,7 @@ public class main {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public static Map<String,Date> getTicket()  throws IOException, JSONException {
-		// TODO Auto-generated method stub
+	private static Map<String,Date> getTicket()  throws IOException, JSONException {
 		Map<String,Date> ids = new HashMap<String,Date>();
 
 		String projName ="EAGLE";
@@ -76,7 +87,7 @@ public class main {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public static Element[] getGitCommits()  throws IOException, JSONException {
+	private static Element[] getGitCommits()  throws IOException, JSONException {
 		Element[] elements = null;
 		String Json_String;
 		int page = 1;
@@ -97,7 +108,7 @@ public class main {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String readToString(String targetURL) throws IOException
+	private static String readToString(String targetURL) throws IOException
 	{
 
 		URL url = new URL(targetURL);
@@ -123,7 +134,7 @@ public class main {
 	}
 
 
-	public static HashMap<String,String> aggregate(Map<String,Date>JiraTicket){
+	private static HashMap<String,String> aggregate(Map<String,Date>JiraTicket){
 		Map<String,String> result = new HashMap<String,String>();
 
 
@@ -133,7 +144,7 @@ public class main {
 	}
 
 
-	public static Map<String, Integer> createCalendar( Element[] elements) throws ParseException {
+	private static Map<String, Integer> createCalendar( Element[] elements) throws ParseException {
 		Map<String, Integer> result = new HashMap<String,Integer>();
 		int start_y = Integer.parseInt(elements[elements.length -1].getCommit().getAuthor().getDate().substring(0,4));
 		int start_m = Integer.parseInt(elements[elements.length -1].getCommit().getAuthor().getDate().substring(5,7));
@@ -170,28 +181,32 @@ public class main {
 		return result;
 	}
 
-	public static void generateCsv(Map<String,Integer>  agg)throws IOException {
+	private static void generateCsv(Map<String,Integer>  agg)  {
 		String header = "Date,Value";
 		 
 		File fout = new File("test.csv");
-		FileOutputStream fos = new FileOutputStream(fout);
-	 
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-		bw.write(header);
-		bw.newLine();
-		for(Map.Entry<String, Integer> entry : agg.entrySet()) {
-			String key = entry.getKey();
-			Integer value = entry.getValue();
-			bw.write(key + "," + value.toString());
+			
+		
+		try(FileOutputStream fos = new FileOutputStream(fout);
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));) {
+			bw.write(header);
 			bw.newLine();
+			for(Map.Entry<String, Integer> entry : agg.entrySet()) {
+				String key = entry.getKey();
+				Integer value = entry.getValue();
+				bw.write(key + "," + value.toString());
+				bw.newLine();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	 
-		bw.close();
+	
 	}
 	
 
 
-	public static csvData test2(Map<String,Date>JiraTicket, Element[] elements, Map<String,Integer> agg) 
+	private static CSVData elaborateGatheredData(Map<String,Date>JiraTicket, Element[] elements, Map<String,Integer> agg) 
 			throws ParseException 
 	{
 
@@ -265,11 +280,11 @@ public class main {
 			// In your case, another loop.
 		}
 
-		csvData returnData = new csvData(result, agg);
+		CSVData returnData = new CSVData(result, agg);
 		return returnData;
 	}
 
-	public static boolean isNumeric(String strNum) {
+	private static boolean isNumeric(String strNum) {
 		if (strNum == null) {
 			return false;
 		}
@@ -281,24 +296,4 @@ public class main {
 		return true;
 	}
 
-	/**
-	 * @param args
-	 * @throws JSONException 
-	 * @throws IOException 
-	 * @throws ParseException 
-	 */
-	public static void main(String[] args) throws IOException, JSONException, ParseException  {
-
-
-
-		Map<String,Date> JiraTicket = getTicket();
-		Element[] elements = getGitCommits();
-		Map<String,Integer> cool = createCalendar(elements);
-		elements[0].getCommit().getMessage();
-		System.out.println("ok");
-		csvData elaborated = test2(JiraTicket, elements,cool);
-		generateCsv(elaborated.getAggregated());
-	}
-
 }
-

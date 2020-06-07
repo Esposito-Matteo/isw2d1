@@ -1,5 +1,5 @@
 
-package Entity;
+package it.uniroma2.matteoesposito.d1.entities;
 
 import java.io.Serializable;
 import com.google.gson.annotations.Expose;
@@ -30,7 +30,7 @@ public class Commit implements Serializable
     @SerializedName("verification")
     @Expose
     private Verification verification;
-    private final static long serialVersionUID = 5831862254545793003L;
+    private static final  long serialVersionUID = 5831862254545793003L;
 
     /**
      * No args constructor for use in serialization

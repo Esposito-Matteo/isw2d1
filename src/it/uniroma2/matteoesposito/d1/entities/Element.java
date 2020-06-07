@@ -1,5 +1,5 @@
 
-package Entity;
+package it.uniroma2.matteoesposito.d1.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,8 +37,8 @@ public class Element implements Serializable
     private Author committer;
     @SerializedName("parents")
     @Expose
-    private List<Tree> parents = new ArrayList<Tree>();
-    private final static long serialVersionUID = -3188403420123156961L;
+    private List<Tree> parents = new ArrayList<>();
+    private static final  long serialVersionUID = -3188403420123156961L;
 
     /**
      * No args constructor for use in serialization

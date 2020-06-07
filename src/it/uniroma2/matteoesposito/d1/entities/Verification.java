@@ -1,4 +1,4 @@
-package Entity;
+package it.uniroma2.matteoesposito.d1.entities;
 
 import java.io.Serializable;
 import com.google.gson.annotations.Expose;
@@ -20,7 +20,7 @@ public class Verification implements Serializable
     @SerializedName("payload")
     @Expose
     private Object payload;
-    private final static long serialVersionUID = 3992008113113718335L;
+    private static final  long serialVersionUID = 3992008113113718335L;
 
     /**
      * No args constructor for use in serialization

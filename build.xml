@@ -15,14 +15,14 @@
         <pathelement location="lib/java-json.jar"/>
         <pathelement location="lib/java-curl-1.2.2.jar"/>
     </path>
-    <path id="run.main (1).classpath">
+    <path id="run.RetrieveTicketsID.classpath">
         <path refid="RetrieveTicketsID.classpath"/>
         <pathelement location="lib/gson-2.6.2.jar"/>
         <pathelement location="lib/commons-lang3-3.10.jar"/>
         <pathelement location="lib/java-json.jar"/>
         <pathelement location="lib/java-curl-1.2.2.jar"/>
     </path>
-    <path id="run.RetrieveTicketsID.classpath">
+    <path id="run.Main (1).classpath">
         <path refid="RetrieveTicketsID.classpath"/>
         <pathelement location="lib/gson-2.6.2.jar"/>
         <pathelement location="lib/commons-lang3-3.10.jar"/>
@@ -65,14 +65,14 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="main (1)">
-        <java classname="main" failonerror="true" fork="yes">
-            <classpath refid="run.main (1).classpath"/>
+    <target name="RetrieveTicketsID">
+        <java classname="it.uniroma2.matteoesposito.d1.utils.RetrieveTicketsID" failonerror="true" fork="yes">
+            <classpath refid="run.RetrieveTicketsID.classpath"/>
         </java>
     </target>
-    <target name="RetrieveTicketsID">
-        <java classname="RetrieveTicketsID" failonerror="true" fork="yes">
-            <classpath refid="run.RetrieveTicketsID.classpath"/>
+    <target name="Main (1)">
+        <java classname="it.uniroma2.matteoesposito.d1.Main" failonerror="true" fork="yes">
+            <classpath refid="run.Main (1).classpath"/>
         </java>
     </target>
 </project>
