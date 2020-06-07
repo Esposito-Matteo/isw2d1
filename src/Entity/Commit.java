@@ -17,7 +17,7 @@ public class Commit implements Serializable
     private Author author;
     @SerializedName("committer")
     @Expose
-    private Committer committer;
+    private Author committer;
     @SerializedName("message")
     @Expose
     private String message;
@@ -49,7 +49,7 @@ public class Commit implements Serializable
      * @param verification
      * @param commentCount
      */
-    public Commit(String url, Author author, Committer committer, String message, Tree tree, int commentCount, Verification verification) {
+    public Commit(String url, Author author, Author committer, String message, Tree tree, int commentCount, Verification verification) {
         super();
         this.url = url;
         this.author = author;
@@ -86,15 +86,15 @@ public class Commit implements Serializable
         return this;
     }
 
-    public Committer getCommitter() {
+    public Author getCommitter() {
         return committer;
     }
 
-    public void setCommitter(Committer committer) {
+    public void setCommitter(Author committer) {
         this.committer = committer;
     }
 
-    public Commit withCommitter(Committer committer) {
+    public Commit withCommitter(Author committer) {
         this.committer = committer;
         return this;
     }

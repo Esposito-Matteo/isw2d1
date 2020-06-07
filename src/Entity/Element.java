@@ -31,13 +31,13 @@ public class Element implements Serializable
     private Commit commit;
     @SerializedName("author")
     @Expose
-    private Author_ author;
+    private Author author;
     @SerializedName("committer")
     @Expose
-    private Committer_ committer;
+    private Author committer;
     @SerializedName("parents")
     @Expose
-    private List<Parent> parents = new ArrayList<Parent>();
+    private List<Tree> parents = new ArrayList<Tree>();
     private final static long serialVersionUID = -3188403420123156961L;
 
     /**
@@ -59,7 +59,7 @@ public class Element implements Serializable
      * @param url
      * @param parents
      */
-    public Element(String url, String sha, String nodeId, String htmlUrl, String commentsUrl, Commit commit, Author_ author, Committer_ committer, List<Parent> parents) {
+    public Element(String url, String sha, String nodeId, String htmlUrl, String commentsUrl, Commit commit, Author author, Author committer, List<Tree> parents) {
         super();
         this.url = url;
         this.sha = sha;
@@ -150,41 +150,41 @@ public class Element implements Serializable
         return this;
     }
 
-    public Author_ getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(Author_ author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 
-    public Element withAuthor(Author_ author) {
+    public Element withAuthor(Author author) {
         this.author = author;
         return this;
     }
 
-    public Committer_ getCommitter() {
+    public Author getCommitter() {
         return committer;
     }
 
-    public void setCommitter(Committer_ committer) {
+    public void setCommitter(Author committer) {
         this.committer = committer;
     }
 
-    public Element withCommitter(Committer_ committer) {
+    public Element withCommitter(Author committer) {
         this.committer = committer;
         return this;
     }
 
-    public List<Parent> getParents() {
+    public List<Tree> getParents() {
         return parents;
     }
 
-    public void setParents(List<Parent> parents) {
+    public void setParents(List<Tree> parents) {
         this.parents = parents;
     }
 
-    public Element withParents(List<Parent> parents) {
+    public Element withParents(List<Tree> parents) {
         this.parents = parents;
         return this;
     }
