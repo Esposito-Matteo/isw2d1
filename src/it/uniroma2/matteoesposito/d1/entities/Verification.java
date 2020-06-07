@@ -32,7 +32,7 @@ public class Verification implements Serializable
      * @param payload
      * @param verified
      */
-    public Verification(boolean verified, String reason, Object signature, Object payload) {
+    public Verification(boolean verified, String reason) {
         super();
         this.verified = verified;
         this.reason = reason;

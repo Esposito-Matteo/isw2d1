@@ -205,7 +205,7 @@ public class Utilities {
 			throws ParseException 
 	{
 
-		Map<String,Date> result = new HashMap<String,Date>(); 
+		Map<String,Date> result = new HashMap<>(); 
 
 		for(Element e  : elements)
 		{
@@ -233,36 +233,36 @@ public class Utilities {
 		printEntriesInMap(result);
 		printFinalizedMap(agg);
 
-		CSVData returnData = new CSVData(result, agg);
-		return returnData;
+		return new CSVData(result, agg);
 	}
-	private static void handlesKeyFound(Map<String, Date> JiraTicket, Map<String, Integer> agg,
+	private static void handlesKeyFound(Map<String, Date> jiraTicket, Map<String, Integer> agg,
 			Map<String, Date> result, Element e, String tempID) throws ParseException {
-		Date dictDate = JiraTicket.get(keyToFind+tempID);
+		Date dictDate = jiraTicket.get(keyToFind+tempID);
 		String dateString = e.getCommit().getAuthor().getDate().replace("T", " ").replace("Z", "");
 		Date gitHubDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
 
 		if(dictDate.before(gitHubDate)) 
 		{
-			handlesBeforeDate(JiraTicket, agg, result, e, tempID, dictDate, gitHubDate);
+			handlesBeforeDate(jiraTicket, agg, result, e, tempID, dictDate, gitHubDate);
 		}
 	}
 	private static void printFinalizedMap(Map<String, Integer> agg) {
 		for(Map.Entry<String, Integer> entry : agg.entrySet()) {
 			String key = entry.getKey();
 			Integer value = entry.getValue();
-			logger.log(Level.INFO,"KEY:\t" + key + "\t\tDate:\t" + value.toString());
+			String debugInfo = "KEY:\t" + key + "\t\tDate:\t" + value.toString();
+			logger.log(Level.INFO,debugInfo);
 		}
 	}
 	private static void printEntriesInMap(Map<String, Date> result) {
 		for(Map.Entry<String, Date> entry : result.entrySet()) {
 			String key = entry.getKey();
 			Date value = entry.getValue();
-
-			logger.log(Level.INFO,"KEY:\t" + key + "\t\tDate:\t" + value.toString());
+			String debugInfo = "KEY:\t" + key + "\t\tDate:\t" + value.toString();
+			logger.log(Level.INFO,debugInfo);
 		}
 	}
-	private static void handlesBeforeDate(Map<String, Date> JiraTicket, Map<String, Integer> agg,
+	private static void handlesBeforeDate(Map<String, Date> jiraTicket, Map<String, Integer> agg,
 			Map<String, Date> result, Element e, String tempID, Date dictDate, Date gitHubDate) {
 		// Update old bucket
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm");  
@@ -278,9 +278,9 @@ public class Utilities {
 		int tempValue = agg.get(e.getCommit().getAuthor().getDate().substring(0,7));
 		agg.put(e.getCommit().getAuthor().getDate().substring(0,7),tempValue +1);
 
-		JiraTicket.put("EAGLE-"+tempID, gitHubDate); 
+		jiraTicket.put(keyToFind+tempID, gitHubDate); 
 		// in order to ignore commit from JIRA bellogin to previously stage of projects development
-		result.put("EAGLE-"+tempID, gitHubDate);
+		result.put(keyToFind+tempID, gitHubDate);
 	}
 
 	private static boolean isNumeric(String strNum) {
@@ -289,6 +289,7 @@ public class Utilities {
 		}
 		try {
 			double d = Double.parseDouble(strNum);
+			d = d+1;
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
