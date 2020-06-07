@@ -16,10 +16,6 @@ public class Verification implements Serializable
     private String reason;
     @SerializedName("signature")
     @Expose
-    private Object signature;
-    @SerializedName("payload")
-    @Expose
-    private Object payload;
     private static final  long serialVersionUID = 3992008113113718335L;
 
     /**
@@ -40,8 +36,6 @@ public class Verification implements Serializable
         super();
         this.verified = verified;
         this.reason = reason;
-        this.signature = signature;
-        this.payload = payload;
     }
 
     public boolean isVerified() {
@@ -70,35 +64,11 @@ public class Verification implements Serializable
         return this;
     }
 
-    public Object getSignature() {
-        return signature;
-    }
 
-    public void setSignature(Object signature) {
-        this.signature = signature;
-    }
-
-    public Verification withSignature(Object signature) {
-        this.signature = signature;
-        return this;
-    }
-
-    public Object getPayload() {
-        return payload;
-    }
-
-    public void setPayload(Object payload) {
-        this.payload = payload;
-    }
-
-    public Verification withPayload(Object payload) {
-        this.payload = payload;
-        return this;
-    }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("verified", verified).append("reason", reason).append("signature", signature).append("payload", payload).toString();
+        return new ToStringBuilder(this).append("verified", verified).append("reason", reason).toString();
     }
 
 }

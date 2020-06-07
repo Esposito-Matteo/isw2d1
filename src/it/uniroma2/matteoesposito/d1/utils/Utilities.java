@@ -16,6 +16,8 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
@@ -32,19 +34,23 @@ public class Utilities {
 	private Utilities() {
 		
 	}
+	
+	private static String keyToFind = "EAGLE-";
+	private static Logger logger = Logger.getLogger(Utilities.class.getName());
 	/**
 	 * 
 	 */
 	public static void start() {
-	
+
+		logger.setLevel(Level.FINE);
 		try {
-			Map<String, Date> JiraTicket = getTicket();
+			Map<String, Date> jiraTicket = getTicket();
 			Element[] elements = getGitCommits();
 			Map<String,Integer> cool = createCalendar(elements);
-			CSVData elaborated = elaborateGatheredData(JiraTicket, elements,cool);
+			CSVData elaborated = elaborateGatheredData(jiraTicket, elements,cool);
 			generateCsv(elaborated.getAggregated());
 		} catch (IOException | JSONException | ParseException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.toString());
 		}
 		
 	}
@@ -56,11 +62,13 @@ public class Utilities {
 	 * @throws JSONException
 	 */
 	private static Map<String,Date> getTicket()  throws IOException, JSONException {
-		Map<String,Date> ids = new HashMap<String,Date>();
+		Map<String,Date> ids = new HashMap<>();
 
 		String projName ="EAGLE";
 		String type ="New%20Feature";
-		Integer j = 0, i = 0, total = 1;
+		Integer j = 0;
+		Integer i = 0;
+		Integer total = 1;
 		//Get JSON API for closed bugs w/ AV in the project
 		do {
 			//Only gets a max of 1000 at a time, so must do this multiple times if bugs >1000
@@ -70,7 +78,6 @@ public class Utilities {
 					+ "%22status%22=%22resolved%22)AND%22resolution%22=%22fixed%22&fields=key,resolutiondate,versions,created&startAt="
 					+ i.toString() + "&maxResults=" + j.toString();
 			JSONObject json = RetrieveTicketsID.readJsonFromUrl(url);
-			//System.out.println(json.toString());
 			JSONArray issues = json.getJSONArray("issues");
 			total = json.getInt("total");
 			for (; i < total && i < j; i++) {
@@ -89,16 +96,16 @@ public class Utilities {
 	 */
 	private static Element[] getGitCommits()  throws IOException, JSONException {
 		Element[] elements = null;
-		String Json_String;
+		String jsonString;
 		int page = 1;
 		do {
 			String url = "https://api.github.com/repos/apache/eagle/commits?page="+Integer.toString(page)+"&per_page=100";	       
-			Json_String=readToString(url);  
+			jsonString=readToString(url);  
 			Gson gson = new Gson();
-			Element[] temp = gson.fromJson(Json_String, Element[].class);
+			Element[] temp = gson.fromJson(jsonString, Element[].class);
 			elements = ArrayUtils.addAll(elements, temp);
 			page +=1;
-		}while(!Json_String.equals("[]"));
+		}while(!jsonString.equals("[]"));
 
 		return elements;
 	}
@@ -134,47 +141,37 @@ public class Utilities {
 	}
 
 
-	private static HashMap<String,String> aggregate(Map<String,Date>JiraTicket){
-		Map<String,String> result = new HashMap<String,String>();
-
-
-
-		return null;
-
-	}
-
-
 	private static Map<String, Integer> createCalendar( Element[] elements) throws ParseException {
-		Map<String, Integer> result = new HashMap<String,Integer>();
-		int start_y = Integer.parseInt(elements[elements.length -1].getCommit().getAuthor().getDate().substring(0,4));
-		int start_m = Integer.parseInt(elements[elements.length -1].getCommit().getAuthor().getDate().substring(5,7));
-		int end_y 	= Integer.parseInt(elements[0].getCommit().getAuthor().getDate().substring(0,4));
-		int end_m 	= Integer.parseInt(elements[0].getCommit().getAuthor().getDate().substring(5,7));
+		Map<String, Integer> result = new HashMap<>();
+		int startY = Integer.parseInt(elements[elements.length -1].getCommit().getAuthor().getDate().substring(0,4));
+		int startM = Integer.parseInt(elements[elements.length -1].getCommit().getAuthor().getDate().substring(5,7));
+		int endY 	= Integer.parseInt(elements[0].getCommit().getAuthor().getDate().substring(0,4));
+		int endM 	= Integer.parseInt(elements[0].getCommit().getAuthor().getDate().substring(5,7));
 
-		int m = start_m;
-		while (start_y<=end_y){
+		int m = startM;
+		while (startY<=endY){
 
 			while(m<=12) {
-				boolean cond1 = (start_y==end_y)&&(m<=end_m);
-				boolean cond2 = start_y<end_y;
+				boolean cond1 = (startY==endY)&&(m<=endM);
+				boolean cond2 = startY<endY;
 				if(cond1||cond2) {
 
 					String month = "";
 
 					if(m<10) {
-						month = "0"+ String.valueOf(m);
+						month = "0"+ m;
 					}else {
 						month = String.valueOf(m);
 					}
 
-					String newkey =String.valueOf(start_y)+"-"+month;
+					String newkey =String.valueOf(startY)+"-"+month;
 					result.put(newkey, 0);
-					System.out.println(newkey);		
+					logger.log(Level.INFO,newkey);		
 				}
 				m +=1;
 			}
 			m= 1;
-			start_y +=1;
+			startY +=1;
 		}
 
 
@@ -198,19 +195,15 @@ public class Utilities {
 				bw.newLine();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.toString());
 		}
 	
 	}
 	
 
-
-	private static CSVData elaborateGatheredData(Map<String,Date>JiraTicket, Element[] elements, Map<String,Integer> agg) 
+	private static CSVData elaborateGatheredData(Map<String,Date>jiraTicket, Element[] elements, Map<String,Integer> agg) 
 			throws ParseException 
 	{
-
-
 
 		Map<String,Date> result = new HashMap<String,Date>(); 
 
@@ -219,8 +212,7 @@ public class Utilities {
 			String message = e.getCommit().getMessage();
 			message =  message.replace("[", "");
 			message =  message.replace("]", "");
-			String[] ids = message.split("EAGLE-");
-			String id = ids[0];
+			String[] ids = message.split(keyToFind);
 			for(String temp  : ids)
 			{
 				String tempID = "";
@@ -232,56 +224,63 @@ public class Utilities {
 				}
 
 
-				if(JiraTicket.containsKey("EAGLE-"+tempID)) {
-					Date dictDate = JiraTicket.get("EAGLE-"+tempID);
-					String dateString = e.getCommit().getAuthor().getDate().replace("T", " ").replace("Z", "");
-					Date gitHubDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
-
-					if(dictDate.before(gitHubDate)) 
-					{
-						// Update old bucket
-						DateFormat dateFormat = new SimpleDateFormat("yyyy-mm");  
-						String strDate = dateFormat.format(dictDate);
-
-						if(!dictDate.equals(new Date(0))) {
-							int oldValue = agg.get(strDate);
-							agg.put(dictDate.toString(), oldValue-1);
-						}
-
-
-						// Update new bucket
-						int tempValue = agg.get(e.getCommit().getAuthor().getDate().substring(0,7));
-						agg.put(e.getCommit().getAuthor().getDate().substring(0,7),tempValue +1);
-
-						JiraTicket.put("EAGLE-"+tempID, gitHubDate); 
-						// in order to ignore commit from JIRA bellogin to previously stage of projects development
-						result.put("EAGLE-"+tempID, gitHubDate);
-					}
+				if(jiraTicket.containsKey(keyToFind+tempID)) {
+					handlesKeyFound(jiraTicket, agg, result, e, tempID);
 				}
 			}
 
 		}
-		System.out.println("ok");
+		printEntriesInMap(result);
+		printFinalizedMap(agg);
+
+		CSVData returnData = new CSVData(result, agg);
+		return returnData;
+	}
+	private static void handlesKeyFound(Map<String, Date> JiraTicket, Map<String, Integer> agg,
+			Map<String, Date> result, Element e, String tempID) throws ParseException {
+		Date dictDate = JiraTicket.get(keyToFind+tempID);
+		String dateString = e.getCommit().getAuthor().getDate().replace("T", " ").replace("Z", "");
+		Date gitHubDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
+
+		if(dictDate.before(gitHubDate)) 
+		{
+			handlesBeforeDate(JiraTicket, agg, result, e, tempID, dictDate, gitHubDate);
+		}
+	}
+	private static void printFinalizedMap(Map<String, Integer> agg) {
+		for(Map.Entry<String, Integer> entry : agg.entrySet()) {
+			String key = entry.getKey();
+			Integer value = entry.getValue();
+			logger.log(Level.INFO,"KEY:\t" + key + "\t\tDate:\t" + value.toString());
+		}
+	}
+	private static void printEntriesInMap(Map<String, Date> result) {
 		for(Map.Entry<String, Date> entry : result.entrySet()) {
 			String key = entry.getKey();
 			Date value = entry.getValue();
 
-			System.out.println("KEY:\t" + key + "\t\tDate:\t" + value.toString());
-			// do what you have to do here
-			// In your case, another loop.
+			logger.log(Level.INFO,"KEY:\t" + key + "\t\tDate:\t" + value.toString());
+		}
+	}
+	private static void handlesBeforeDate(Map<String, Date> JiraTicket, Map<String, Integer> agg,
+			Map<String, Date> result, Element e, String tempID, Date dictDate, Date gitHubDate) {
+		// Update old bucket
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm");  
+		String strDate = dateFormat.format(dictDate);
+
+		if(!dictDate.equals(new Date(0))) {
+			int oldValue = agg.get(strDate);
+			agg.put(dictDate.toString(), oldValue-1);
 		}
 
-		for(Map.Entry<String, Integer> entry : agg.entrySet()) {
-			String key = entry.getKey();
-			Integer value = entry.getValue();
 
-			System.out.println("KEY:\t" + key + "\t\tDate:\t" + value.toString());
-			// do what you have to do here
-			// In your case, another loop.
-		}
+		// Update new bucket
+		int tempValue = agg.get(e.getCommit().getAuthor().getDate().substring(0,7));
+		agg.put(e.getCommit().getAuthor().getDate().substring(0,7),tempValue +1);
 
-		CSVData returnData = new CSVData(result, agg);
-		return returnData;
+		JiraTicket.put("EAGLE-"+tempID, gitHubDate); 
+		// in order to ignore commit from JIRA bellogin to previously stage of projects development
+		result.put("EAGLE-"+tempID, gitHubDate);
 	}
 
 	private static boolean isNumeric(String strNum) {

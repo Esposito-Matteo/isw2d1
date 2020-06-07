@@ -47,32 +47,18 @@ public class Element implements Serializable
     public Element() {
     }
 
-    /**
-     * 
-     * @param commentsUrl
-     * @param committer
-     * @param author
-     * @param htmlUrl
-     * @param commit
-     * @param sha
-     * @param nodeId
-     * @param url
-     * @param parents
-     */
-    public Element(String url, String sha, String nodeId, String htmlUrl, String commentsUrl, Commit commit, Author author, Author committer, List<Tree> parents) {
-        super();
-        this.url = url;
-        this.sha = sha;
-        this.nodeId = nodeId;
-        this.htmlUrl = htmlUrl;
-        this.commentsUrl = commentsUrl;
-        this.commit = commit;
-        this.author = author;
-        this.committer = committer;
-        this.parents = parents;
-    }
 
-    public String getUrl() {
+    public Element(String url, Commit commit, Author author, Author committer, List<Tree> parents) {
+		super();
+		this.url = url;
+		this.commit = commit;
+		this.author = author;
+		this.committer = committer;
+		this.parents = parents;
+	}
+
+
+	public String getUrl() {
         return url;
     }
 
