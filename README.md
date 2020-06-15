@@ -8,13 +8,13 @@ Lo scopo della prima deliverable, così come espresso dalle specifiche nel mater
 Uno dei principali metodi statistici applicabili è la rilevazione dello scarto quadratico medio, detto anche deviazione standard. Attraverso la correlazione tra questo valore e la distribuzione normale dei dati rilevati si ottengono i limiti naturali della variazione di un processo.
 Un processo viene poi classificato in base all'esito dell'osservazione che ne deriva in due categorie:
 
-•	sotto controllo statistico, quando è influenzato unicamente da fattori casuali, cioè da "madre natura"
-•	fuori controllo statistico, quando l'influenza delle sue variazioni è causata da fattori specifici.
+- sotto controllo statistico, quando è influenzato unicamente da fattori casuali, cioè da "madre natura"
+- fuori controllo statistico, quando l'influenza delle sue variazioni è causata da fattori specifici.
 
 In particolare, se un processo è sotto controllo statistico, l'osservazione del suo andamento nel tempo, effettuando un campionamento di dati, seguirà una distribuzione di frequenza che sarà molto simile a una distribuzione normale. Questo implica che l'analisi del processo dal punto di vista della media e della sua variabilità sia fondamentale per determinare i "limiti naturali" del processo, entro i quali, se non accadono cause specifiche, il processo manterrà il proprio andamento. Viceversa, una volta studiato un processo che si mantiene entro certi limiti con una distribuzione di probabilità ben definita, quando questa distribuzione cambia, oppure cambiano i limiti, si può pensare ragionevolmente dal punto di vista statistico che stia agendo una "possibile causa di fuori controllo". Nello specifico, le specifiche prevedono di:
 
-•	misurare la stabilità del numero di fixed bugs del progetto Eagle, realizzando un process control chart;
-•	individuare eventuali periodi di instabilità   relativamente al numero di fixed bugs e cercare di identificare le possibili cause di tale comportamento ed eventuali soluzioni da adottare in futuro;
-•	determinare se il processo può essere considerato stabile (stable) in relazione all’attributo studiato.
+-	misurare la stabilità del numero di fixed bugs del progetto Eagle, realizzando un process control chart;
+-	individuare eventuali periodi di instabilità   relativamente al numero di fixed bugs e cercare di identificare le possibili cause di tale comportamento ed eventuali soluzioni da adottare in futuro;
+-	determinare se il processo può essere considerato stabile (stable) in relazione all’attributo studiato.
 
 
