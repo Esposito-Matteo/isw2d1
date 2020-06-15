@@ -2,6 +2,11 @@
 
 # Software Engeneering II
 
+# Content of this repository
+* Java Source Code
+* Logger configurations file
+* Dependecies
+
 ## Deliverable #1
 
 Lo scopo della prima deliverable, così come espresso dalle specifiche nel materiale del corso, è incentrata nella raccolta incrociata e plot di dati presenti sulle piattaforme GitHub e Jira su di una specifica metrica al fine di formulare osservazioni sullo statistical process control.  Lo Statistical process control in lingua inglese o controllo statistico di processo è l'applicazione di un metodo matematico o statistico che consente di contenere l'esito di un processo all'interno di specifici limiti, determinati attraverso lo studio della variazione naturale dei limiti del processo.
