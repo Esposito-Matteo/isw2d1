@@ -102,7 +102,8 @@ public class Utilities {
 		do {
 			String url = "https://api.github.com/repos/apache/eagle/commits?page="+Integer.toString(page)+"&per_page=100";	       
 			jsonString=readToString(url);  
-			logger.log(Level.INFO, "Requesting data: "+url);
+			String logMessage = "Requesting data: "+url;
+			logger.log(Level.INFO, logMessage);
 			Gson gson = new Gson();
 			Element[] temp = gson.fromJson(jsonString, Element[].class);
 			elements = ArrayUtils.addAll(elements, temp);
@@ -185,7 +186,8 @@ public class Utilities {
 		File fdir = new File("file\\");
 		File fout = new File("file\\result.csv");
 		fdir.mkdirs();
-		logger.log(Level.INFO, "Saving result into: "+fout.getAbsolutePath());
+		String logMessage = "Saving result into: "+fout.getAbsolutePath();
+		logger.log(Level.INFO, logMessage);
 		
 			
 		
