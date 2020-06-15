@@ -49,6 +49,7 @@ public class Utilities {
 			Map<String,Integer> cool = createCalendar(elements);
 			CSVData elaborated = elaborateGatheredData(jiraTicket, elements,cool);
 			generateCsv(elaborated.getAggregated());
+			logger.log(Level.INFO, "Risultati salvati correttamente della directory di destinazione");
 		} catch (IOException | JSONException | ParseException e) {
 			logger.log(Level.SEVERE, e.toString());
 		}
@@ -101,6 +102,7 @@ public class Utilities {
 		do {
 			String url = "https://api.github.com/repos/apache/eagle/commits?page="+Integer.toString(page)+"&per_page=100";	       
 			jsonString=readToString(url);  
+			logger.log(Level.INFO, "Requesting data: "+url);
 			Gson gson = new Gson();
 			Element[] temp = gson.fromJson(jsonString, Element[].class);
 			elements = ArrayUtils.addAll(elements, temp);
@@ -180,8 +182,11 @@ public class Utilities {
 
 	private static void generateCsv(Map<String,Integer>  agg)  {
 		String header = "Date,Value";
-		 
-		File fout = new File("test.csv");
+		File fdir = new File("file\\");
+		File fout = new File("file\\result.csv");
+		fdir.mkdirs();
+		logger.log(Level.INFO, "Saving result into: "+fout.getAbsolutePath());
+		
 			
 		
 		try(FileOutputStream fos = new FileOutputStream(fout);
